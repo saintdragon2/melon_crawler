@@ -104,6 +104,11 @@ def read_chart_and_write_dataframe(driver, page_info, top_n):
         EC.presence_of_element_located((By.ID, 'serch_cnt'))
     )
 
+    # wait until search_cnt.text contains '~'
+    WebDriverWait(search_cnt, 15).until(
+        lambda search_cnt: '~' in search_cnt.text
+    )
+
     chart_name = search_cnt.text.replace('.', '_').replace(' ~ ', '__')
     file_path = f'./output/{chart_name}__{page_info}.txt'
     print(chart_name)
@@ -216,7 +221,7 @@ with webdriver.Chrome(options=options) as driver:
                     # driver.find_element_by_xpath('//div[@class="wrap_btn_serch"]/button[@type="submit"]').click()
                     driver.find_element(By.XPATH, '//div[@class="wrap_btn_serch"]/button[@type="submit"]').click()
                     
-                    time.sleep(1)
+                    time.sleep(0.5)
 
                     driver = read_chart_and_write_dataframe(driver, '__01_50', 50)
 
